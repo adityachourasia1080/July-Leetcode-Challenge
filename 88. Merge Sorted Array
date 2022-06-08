@@ -1,0 +1,35 @@
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        
+        int i=0,j=0,k=0;
+        // shift all no in num1 to right like
+        //[1,2,3,0,0,0]  ----> [0,0,0,1,2,3]
+        for (i=m-1;i>=0;i--)
+        {
+            swap(nums1[m+n-1-k],nums1[i]);  // shifting to right
+            k++;
+        }
+        i=m+n-k,k=0;                 // setting i in nums1    in above eg i=3
+        while(i<m+n && j<n)          // simple merge sort
+        {
+            if (nums1[i]<nums2[j])
+            {
+                nums1[k++]=nums1[i++];
+            }
+            else
+            {
+                nums1[k++]=nums2[j++];
+            }
+        }
+        
+        if (j<n)                    // second array is not fully completed
+        {
+            while(j<n)
+            {
+                nums1[k++]=nums2[j++];
+            }
+        }
+        
+    }
+};
