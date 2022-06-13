@@ -1,0 +1,69 @@
+//Recursion + Memoization
+class Solution {
+public:
+    int solve(vector<vector<int>>&t,int r,int ind,vector<vector<int>>& dp)
+    {
+        if (r==t.size())   return 0;
+        
+        if (dp[r][ind]!=-1)     return dp[r][ind];
+        
+        return dp[r][ind]=min(solve(t,r+1,ind,dp),solve(t,r+1,ind+1,dp))+t[r][ind];
+        
+    }
+    int minimumTotal(vector<vector<int>>& triangle) {
+        
+        int n= triangle.size(),m=triangle[n-1].size();
+        vector<vector<int>>dp(n,vector<int>(m,-1));
+        return solve(triangle,0,0,dp);
+        
+    }
+};
+
+
+
+// Tabulation Method
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        int n= triangle.size(),m=triangle[n-1].size();
+        vector<vector<int>>dp(n,vector<int>(m,-1));
+        
+        for (int j=0;j<m;j++) dp[n-1][j]=triangle[n-1][j];
+        
+        for (int i=n-2;i>=0;i--)
+        {
+            for (int j=i;j>=0;j--)  dp[i][j]=min(dp[i+1][j],dp[i+1][j+1])+triangle[i][j];
+            
+        }
+        return dp[0][0];
+        
+        
+    }
+};
+
+// O(N) space
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        int n= triangle.size(),m=triangle[n-1].size();
+        vector<int> next(m);
+        
+        for (int i=n-1;i>=0;i--)
+        {
+            vector<int> curr(m);
+            for (int j=i;j>=0;j--)
+            {
+                if (i==n-1)  curr[j]=triangle[i][j];
+                else
+                {
+                    int stepj=next[j];
+                    int stepj1= next[j+1];
+                    curr[j]=min(stepj,stepj1)+triangle[i][j];
+                }
+            }
+            next=curr;
+        }
+        return next[0];
+        
+    }
+};
