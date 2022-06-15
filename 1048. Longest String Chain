@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int solve(string x,unordered_map<string,int>&vis,unordered_map<string,int>&have,unordered_map<int,vector<string>>&mp)
+    {
+        if (vis.find(x)!=vis.end())   return vis[x];
+        int len=x.length();
+        vis[x]=1;
+        if (mp.find(len-1)==mp.end())   return 1;
+        int ans=1;
+       for (int i=0;i<x.length();i++)
+       {
+           string temp;
+           temp+=(i==0 ? "": x.substr(0,i));
+           temp+=(i==(x.length()-1) ? "": x.substr(i+1,x.length()-(i+1)));
+           
+           if (have.find(temp)!=have.end())
+           {
+               ans=max(ans,solve(temp,vis,have,mp)+1);
+           }
+       }
+        return vis[x]=ans;
+        
+    }
+    int longestStrChain(vector<string>& words) {
+     unordered_map<string,int> have,vis;
+        unordered_map<int,vector<string>> mp;
+        int maxy=1;
+        for (auto x: words) 
+        {
+          have[x]++;
+         if (x.length()> maxy)  maxy=x.length();
+            mp[x.length()].push_back(x);
+        }
+        int ans=1;
+        for (int i=maxy;i>=1;i--)
+        {
+            for (auto x: mp[i])
+            {
+                if (vis.find(x)==vis.end())
+                {
+                    ans=max(ans,solve(x,vis,have,mp));
+                }
+            }
+        }
+        return ans;
+        
+    }
+};
